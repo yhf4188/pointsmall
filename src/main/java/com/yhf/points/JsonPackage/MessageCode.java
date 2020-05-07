@@ -5,7 +5,8 @@ public class MessageCode {
     public static int SUCCESS = 2000 ;
     // 警告
     public static int WARN = 2001;
-
+    public static final int FAILURE = 2002;
+    public static final int EXCEPTION = 2003;
     // token
     public static int TOKEN_ERROR = 4001;//token 不合法
     public static int TOKEN_OVERDUE = 4002;//token 已过期
