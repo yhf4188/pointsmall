@@ -13,7 +13,15 @@
     <version>0.0.1-SNAPSHOT</version>
     <name>points</name>
     <description>Demo project for Spring Boot</description>
-
+    <repositories>
+        <repository>
+            <id>goeasy</id>
+            <name>goeasy</name>
+            <url>
+                http://maven.goeasy.io/content/repositories/releases/
+            </url>
+        </repository>
+    </repositories>
     <properties>
         <java.version>1.8</java.version>
     </properties>
@@ -74,6 +82,31 @@
         <dependency>
             <groupId>org.apache.httpcomponents</groupId>
             <artifactId>httpcore</artifactId>
+        </dependency>
+
+        <!-- mahout -->
+        <dependency>
+            <groupId>org.apache.mahout</groupId>
+            <artifactId>mahout</artifactId>
+            <version>0.11.1</version>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.mahout</groupId>
+            <artifactId>mahout-examples</artifactId>
+            <version>0.11.1</version>
+            <exclusions>
+                <exclusion>
+                    <groupId>org.slf4j</groupId>
+                    <artifactId>slf4j-log4j12</artifactId>
+                </exclusion>
+            </exclusions>
+        </dependency>
+
+        <!--goEasy-->
+        <dependency>
+            <groupId>io.goeasy</groupId>
+            <artifactId>goeasy-sdk</artifactId>
+            <version>0.3.8</version>
         </dependency>
     </dependencies>
 

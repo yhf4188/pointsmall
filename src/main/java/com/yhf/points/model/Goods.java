@@ -3,11 +3,12 @@ package com.yhf.points.model;
 import lombok.Data;
 
 @Data
+//商品类
 public class Goods {
-    int id;
-    String name;
-    int points;
-    String picture;
+    int id;//id
+    String name;//商品名
+    int points;//商品积分
+    String picture;//商品图片地址
     int goods_num;
     int goods_browse;
 

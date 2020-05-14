@@ -25,7 +25,7 @@ public class UserController {
      * @return
      */
 //    @RequestMapping(value = "/getUser",method = RequestMethod.POST)
-    @PostMapping("/getUser")
+    @GetMapping("/getUser")
     public Message getUser(@RequestBody JSONObject map)
     {
         System.out.println(map.toString());
