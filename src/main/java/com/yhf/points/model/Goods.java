@@ -11,16 +11,18 @@ public class Goods {
     String picture;//商品图片地址
     int goods_num;
     int goods_browse;
+    int goods_classf;
 
     public Goods() {
     }
 
-    public Goods(int id, String name, int points, String picture, int goods_num, int goods_browse) {
+    public Goods(int id, String name, int points, String picture, int goods_num, int goods_browse,int goods_classf) {
         this.id=id;
         this.name = name;
         this.points = points;
         this.picture = picture;
         this.goods_num = goods_num;
         this.goods_browse = goods_browse;
+        this.goods_classf = goods_classf;
     }
 }

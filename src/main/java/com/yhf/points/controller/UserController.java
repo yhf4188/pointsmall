@@ -25,18 +25,18 @@ public class UserController {
      * @return
      */
 //    @RequestMapping(value = "/getUser",method = RequestMethod.POST)
-    @GetMapping("/getUser")
+    @PostMapping("/getUser")
     public Message getUser(@RequestBody JSONObject map)
     {
         System.out.println(map.toString());
         Attribute user=map.getObject("user",Attribute.class);
-        System.out.println(user.toString());
         Message message=new Message();
         try{
             Attribute arr=userService.getUser(user);
             if(arr!=null)
             {
                 message.setMessage(MessageCode.SUCCESS,"该用户信息正确");
+                System.out.println(arr);
                 message.getData().put("user",arr);
             }
             else message.setMessage(MessageCode.FAILURE,"该用户信息错误");
