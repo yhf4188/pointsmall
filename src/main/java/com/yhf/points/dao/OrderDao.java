@@ -25,7 +25,7 @@ public interface OrderDao {
     @Delete(value = "delete good_order where id = #{id}")
     public int deleteOrder(Order order);
 
-    @Insert(value = "insert into good_order (goods_id,user_id,goods_state,address_id)  values(#{order.goods_id},#{order.user_id},#{order.goods_state},#{address_id} )")
-    public int insertOrder(Order order, Integer address_id);
+    @Insert(value = "insert into good_order (goods_id,user_id,goods_state,address_id)  values(#{goods_id},#{user_id},#{goods_state},#{address_id} )")
+    public int insertOrder(Integer goods_id, Integer user_id, String goods_state, Integer address_id);
 
 }

@@ -12,7 +12,7 @@ import java.util.List;
  */
 @Mapper
 public interface GoodsDao {
-    @Select("select * from goods")
+    @Select("select * from goods order by rand()")
     @Results({
             @Result(property = "id", column = "id"),
             @Result(property = "name", column = "goods_name"),

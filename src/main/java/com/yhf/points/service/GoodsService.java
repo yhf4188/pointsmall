@@ -61,7 +61,7 @@ public class GoodsService {
             valueOperations = redisTemplate.opsForValue();
             Integer num = (Integer)valueOperations.get(String.valueOf(mallID));
             Goods goods = goodsDao.getGood(mallID);
-            if(user.getPoints()<goods.getPoints())
+            if(user.getPoints()<goods.getPoints())//判断用户积分是否足够
             {
                 return false;
             }
@@ -70,8 +70,6 @@ public class GoodsService {
                 if(user.getPoints()>= good.getPoints()) {
                     valueOperations.set(Integer.toString(mallID), good.getGoods_num());
                     num = good.getGoods_num();
-                    //注意要设置序列化方式为StringRedisSerializer，不然不能把value做加减操作
-                    // 同时设置超时时间，因为不能让redis存着所有商品的库存数，以免占用内存。
                     if (num >= 0) {
                         //设置有效期十分钟
                         redisService.expireKey(String.valueOf(mallID), 60 * 10, TimeUnit.SECONDS);
@@ -82,13 +80,10 @@ public class GoodsService {
             if (num < 1) {
                 return false;
             }
-            // 第二步：减少库存
             long value = valueOperations.increment(Integer.toString(mallID), -1);
             // 库存充足
             if (value >= 0) {
                 // update 数据库中商品库存和订单系统下单，单的状态未待支付
-                // 分开两个系统处理时，可以用LCN做分布式事务，但是也是有概率会订单系统的网络超时
-                // 也可以使用最终一致性的方式，更新库存成功后，发送mq，等待订单创建生成回调。
                 Goods good = new Goods();
                 good.setId(mallID);
                 good.setGoods_num((int) value);
@@ -96,15 +91,13 @@ public class GoodsService {
                 int points = goodsDao.getGood(mallID).getPoints();
                 if (res > 0) {
                     Order order = new Order(0, mallID, userID, "未发货");
-                    orderDao.insertOrder(order,addressID);
+                    orderDao.insertOrder(order.getGoods_id(),order.getUser_id(),order.getGoods_state(),addressID);
                     user.setPoints(user.getPoints()-points);
                     userDao.updatePoints(user);
                 }
                 return true;
             } else {
-                // 减了后小小于0 ，如两个人同时买这个商品，导致A人第一步时看到还有10个库存，但是B人买9个先处理完逻辑，
-                // 导致B人的线程10-9=1, A人的线程1-10=-9，则现在需要增加刚刚减去的库存，让别人可以买1个
-                valueOperations.increment(Integer.toString(mallID), 1);
+                valueOperations.increment(Integer.toString(mallID), 1);// 减了后小小于0 ，如两个人同时买这个商品，导致A人第一步时看到还有10个库存，但是B人买9个先处理完逻辑，导致B人的线程10-9=1, A人的线程1-10=-9，则现在需要增加刚刚减去的库存，让别人可以买1个
                 return false;
             }
         } catch (Exception e)
